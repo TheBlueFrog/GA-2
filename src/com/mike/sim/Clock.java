@@ -68,7 +68,7 @@ public class Clock extends Agent {
         if (msg.mSender instanceof Clock) {
             time++;
 
-            doClock();
+            doClock();//
 
             try {
                 sleep(Main.animation ? 1 : 1);
