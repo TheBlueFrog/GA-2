@@ -1,5 +1,7 @@
 package com.mike.sim;
 
+import com.mike.util.Location;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -33,7 +35,7 @@ public class Drawing extends JPanel {
         mFrame.setContentPane(this);
 
         //Display the window, make large enough to hold grid
-        mFrame.setSize(new Dimension((int) Constants.WindowX, (int) Constants.WindowY + 50));
+        mFrame.setSize(new Dimension((int) Location.WindowWidth, (int) Location.WindowHeight + 50));
 //	        frame.pack();
         mFrame.setLocation(100, 100);
         mFrame.setVisible(true);

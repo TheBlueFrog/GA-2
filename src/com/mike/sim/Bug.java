@@ -17,7 +17,10 @@ public class Bug extends LocatedAgent {
 
     @Override
     void paint(Graphics2D g2) {
-
+        g2.drawRect(
+                (int) Location.meter2PixelX(location.x),
+                (int) Location.meter2PixelY(location.y),
+                10, 10);
     }
 
     @Override
@@ -32,8 +35,15 @@ public class Bug extends LocatedAgent {
         }
 
         if (msg.mSender instanceof Clock) {
-            Log.d(TAG, "got a clock");
+            doStep();
         }
 
+    }
+
+    private void doStep() {
+//        Log.d(TAG, "got a clock");
+        this.location.x += 1.0;
+        this.location.y += 1.0;
+        Main.repaint();
     }
 }

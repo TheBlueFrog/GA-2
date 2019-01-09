@@ -15,43 +15,26 @@ public class Location {
     public double x;
     public double y;
 
-    // setup map where the objects are located
+    static public double worldLeft = -1000;
+    static public double worldTop = 1000;
+    static public double worldRight = 1000;
+    static public double worldBottom = -1000;
 
-    // lat lon of map upper left
-    static public double MapLeft = -123.36;
-    static public double MapTop = 45.8;
+    // width/height of world
+    static public double WorldWidthMeters = (worldRight - worldLeft);
+    static public double WorldHeightMeters = (worldTop - worldBottom);
 
-    // lat lon of map lower right
-    static public double MapRight = -121.6;
-    static public double MapBottom = 44.9;
+    static public double WindowWidth = 750;            // window size in pixels
+    static public double WindowHeight = 500;
 
-    // width/height of map
-    static public double MapWidthDeg = (MapRight - MapLeft);
-    static public double MapHeightDeg = (MapTop - MapBottom);
-
-    static public double MapWidthMeters = 133341.0;   // measured in Google Earth at mid-latitude
-    static public double MapHeightMeters = 116030.0;
-
-    public static double meter2DegX(double dx) {
-        return dx / MapWidthMeters * MapWidthDeg;
-    }
-    public static double meter2DegY(double dy) {
-        return dy / MapHeightMeters * MapHeightDeg;
+    static public double meter2PixelX(double meterX) {
+        return ((meterX - worldLeft) / WorldWidthMeters) * WindowWidth; }
+    static public double meter2PixelY(double meterY) {
+        return WindowHeight - (((meterY - worldBottom) / WorldHeightMeters) * WindowHeight);
     }
 
-    static public double deg2MeterX(double xDeg) {
-        return (xDeg / MapWidthDeg) * MapWidthMeters;
-    }
-    static public double deg2MeterY(double yDeg) {
-        return (yDeg / MapHeightDeg) * MapHeightMeters;
-    }
-
-    static public Location MapCenter = null;
-
-    static {
-        MapCenter = new Location(MapLeft + (MapWidthDeg / 2.0), MapBottom + (MapHeightDeg / 2.0));
-    }
-
+    static double WorldCenterX = ((worldRight - worldLeft) / 2) + worldLeft;
+    static double WorldCenterY = ((worldTop - worldBottom) / 2) + worldBottom;
 
     /**
      *
@@ -76,8 +59,8 @@ public class Location {
         // location is in lat/lon
 //        return (distance(y, x, location.y, location.x));
 //    }
-        double dx = deg2MeterX(this.x - location.x);
-        double dy = deg2MeterY(this.y - location.y);
+        double dx = meter2PixelX(this.x - location.x);
+        double dy = meter2PixelY(this.y - location.y);
         return Math.sqrt((dx * dx) + (dy * dy));
     }
 
@@ -134,13 +117,13 @@ public class Location {
     }
 
     /**
-     * move so many meters, remember, locations are in Lon/Lat
+     * move so many meters
      * @param dx
      * @param dy
      */
     public void moveMeters(double dx, double dy) {
-        x += meter2DegX(dx);
-        y += meter2DegY(dy);
+        x += dx;
+        y += dy;
     }
 
     /**
@@ -158,8 +141,8 @@ public class Location {
         double y = Math.sin(theta) * r;
 
         Location loc = new Location(
-                MapCenter.x + meter2DegX(x),
-                MapCenter.y + meter2DegY(y));
+                WorldCenterX + x,
+                WorldCenterY + y);
         return loc;
     }
 
@@ -174,8 +157,8 @@ public class Location {
         double y = Math.sin(theta) * r;
 
         Location loc = new Location(
-                MapCenter.x + meter2DegX(x),
-                MapCenter.y + meter2DegY(y));
+                WorldCenterX + x,
+                WorldCenterY + y);
         return loc;
     }
 }
