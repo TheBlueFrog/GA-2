@@ -8,7 +8,7 @@ package com.mike.sim;
 public class Message
 {
 	public Agent mSender = null;
-	public Class<? extends Agent> mRecipient = null;
+	public Agent mRecipient = null;
 	public long serialNumber;
 	public Object mMessage;
 	
@@ -24,7 +24,7 @@ public class Message
 //		mMessage = msg;
 //	}
 
-	public Message(Agent sender, Class<? extends Agent> class1, long serialNumber, Object msg)
+	public Message(Agent sender, Agent class1, long serialNumber, Object msg)
 	{
 		mSender = sender;
 		mRecipient = class1;

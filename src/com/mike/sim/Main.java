@@ -1,6 +1,7 @@
 package com.mike.sim;
 
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.List;
 
@@ -22,16 +23,9 @@ public class Main {
 
     public static boolean animation = true;
 
-    // all the agents that do the actual evaluation
-
-    private static List<AgentInfo> mAgents = new ArrayList<>();
-
-    static
-    {
-        mAgents.add(new AgentInfo(Clock.class, 1));
-
-        mAgents.add(new AgentInfo(Bug.class, 1));
-    };
+//        mAgents.add(new AgentInfo(Clock.class, 1));
+//
+//        mAgents.add(new AgentInfo(Bug.class, 1));
 
     public static void main(String[] args)
     {
@@ -51,21 +45,27 @@ public class Main {
 
                 drawing = new Drawing(1.0);
 
-                mFramework = new Framework(mAgents);
+                mFramework = new Framework();
+                try {
+                    mFramework.construct(Clock.class);
+                    mFramework.construct(Bug.class);
+
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
 
     public static void paint(final Graphics2D g2) {
-        Log.d(TAG, "in paint");
-        mFramework.walk(new Framework.agentWalker() {
-            @Override
-            public void f(Agent a) {
-                if (a instanceof PaintableAgent) {
-                    ((PaintableAgent) a).paint(g2);
-                }
-            }
-        });
+//        Log.d(TAG, "in paint");
+        mFramework.paint(g2);
     }
 
     public static void repaint() {

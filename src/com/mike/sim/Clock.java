@@ -31,7 +31,7 @@ public class Clock extends Agent {
 
 
     public Clock(Framework f, Long serialNumber) {
-        super(f, serialNumber);
+        super(f);
 
         assert serialNumber == 0; // singleton
 
@@ -59,12 +59,6 @@ public class Clock extends Agent {
 
         assert msg.serialNumber == this.getSerialNumber();
 
-        if ((msg.mSender == null) && (((Framework.State) msg.mMessage)).equals(Framework.State.AgentsRunning)) {
-            // frameworks says everyone is ready, start clock ticking
-            send(new Message(this, Clock.class, 0, null));
-            return;
-        }
-
         if (msg.mSender instanceof Clock) {
             time++;
 
@@ -76,13 +70,17 @@ public class Clock extends Agent {
                 e.printStackTrace();
             }
 
-            // next tick
-            send(new Message(this, Agent.class, 0, null));
+            if ( ! stopped) {
+                // next tick
+                send(new Message(this, this, 0, null));
+            }
         }
     }
 
     private void doClock () {
 //        Log.d(TAG, String.format("%8d", time));
+        if (time > 100)
+            stopped = true;
     }
 
 }

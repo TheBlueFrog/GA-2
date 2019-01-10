@@ -31,15 +31,19 @@ abstract public class Agent extends Thread
 {
 	abstract protected String getClassName ();
 
+	private static long nextSerialNumber = 0;
+
 	private final long serialNumber;
 	private UUID mID;
 	private final BlockingQueue<Message> queue;
 	protected Framework mFramework;
 
-	public Agent(Framework f, long id)
+	protected boolean stopped = true;
+
+	public Agent(Framework f)
 	{
 		mFramework = f;
-		this.serialNumber = id;
+		this.serialNumber = nextSerialNumber++;
 		mID = UUID.randomUUID();
 
 		queue = new LinkedBlockingQueue<Message>();
@@ -77,17 +81,19 @@ abstract public class Agent extends Thread
 	@Override
 	public void run()
 	{
+		stopped = false;
+
 		try
 		{
-			while (true)
+			while ( ! stopped)
 			{
 				if (Main.getRunning()) {
 					Message m = queue.take();
-//				Log.d(getID(true), String.format("Process message from %s, %s", m.mSender.getID(true), m.mMessage));
+//		    		Log.d(getID(true), String.format("Process message from %s, %s", m.mSender.getID(true), m.mMessage));
 
 					if (m.serialNumber == -1) {
 						// that's a wild card, matches all agent serial numbers
-						// get it back to what it should be
+						// patch it back to what it should be
 						Message n = new Message(m);
 						n.serialNumber = serialNumber;
 						m = n;
@@ -114,7 +120,7 @@ abstract public class Agent extends Thread
 	}
 
 	protected void register() {
-		mFramework.register(this);
+		//start();
 	}
 
 	public boolean send(Message m)
@@ -122,7 +128,8 @@ abstract public class Agent extends Thread
 		return mFramework.send(m);
 	}
 
-	abstract protected void onMessage(Message msg);
+	abstract void onMessage(Message m);
+
 
 //	protected boolean send(Class<? extends Agent> class1, int serialNumber, Object msg)
 //	{

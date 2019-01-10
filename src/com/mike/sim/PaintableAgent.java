@@ -23,8 +23,10 @@ abstract public class PaintableAgent extends Agent {
      */
     abstract void paint(Graphics2D g2);
 
-    public PaintableAgent(Framework f, Long id) {
-        super(f, id);
+    public PaintableAgent(Framework f) {
+        super(f);
+
+        f.registerAsPaintable(this);
     }
 
 }
