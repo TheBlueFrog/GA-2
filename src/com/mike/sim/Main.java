@@ -46,19 +46,9 @@ public class Main {
                 drawing = new Drawing(1.0);
 
                 mFramework = new Framework();
-                try {
-                    mFramework.construct(Clock.class);
-                    mFramework.construct(Bug.class);
 
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                }
+                (new Clock(mFramework)).start();
+                (new Bug(mFramework)).start();
             }
         });
     }

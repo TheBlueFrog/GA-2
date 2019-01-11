@@ -13,10 +13,10 @@ public class Bug extends LocatedAgent {
 
     private double energy = 100;
 
-    public Bug(Framework f, java.lang.Long serialNumber) {
-        super(f, serialNumber);
+    public Bug(Framework f) {
+        super(f);
 
-        register();
+        f.registerForClock(this);
     }
 
     @Override
@@ -30,17 +30,20 @@ public class Bug extends LocatedAgent {
                 (int) Location.meter2PixelX(location.x),
                 (int) Location.meter2PixelY(location.y),
                 10, 10);
+
+        g2.drawString(
+                String.format("%.0f", energy),
+                (int) Location.meter2PixelX(location.x),
+                (int) Location.meter2PixelY(location.y));
     }
 
     @Override
     protected void onMessage(Message msg) {
-
-        assert msg.serialNumber == this.getSerialNumber();
+        Log.d(TAG, String.format("Msg from %s", msg.mSender.getClass().getSimpleName()));
 
         if (msg.mSender instanceof Clock) {
             doTick();
         }
-
     }
 
     private void doTick() {

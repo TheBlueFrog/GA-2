@@ -1,16 +1,7 @@
 package com.mike.sim;
 
-import com.mike.sim.Agent;
-import com.mike.sim.Framework;
-import com.mike.sim.Message;
 import com.mike.util.Log;
 import com.mike.util.LogImp;
-import javafx.util.Pair;
-
-import java.awt.*;
-import java.awt.geom.Ellipse2D;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by mike on 6/17/2016.
@@ -30,10 +21,8 @@ public class Clock extends Agent {
     }
 
 
-    public Clock(Framework f, Long serialNumber) {
+    public Clock(Framework f) {
         super(f);
-
-        assert serialNumber == 0; // singleton
 
         LogImp _d = new LogImp() {
             @Override
@@ -51,18 +40,19 @@ public class Clock extends Agent {
         Log.set_d(_d);
         Log.set_e(_e);
 
-        register();
+        send(new Message(this, this, null));
+
     }
 
     @Override
     protected void onMessage(Message msg) {
 
-        assert msg.serialNumber == this.getSerialNumber();
+        Log.d(TAG, String.format("Msg from %s", msg.mSender.getClass().getSimpleName()));
 
         if (msg.mSender instanceof Clock) {
             time++;
 
-            doClock();//
+            doClock(msg);//
 
             try {
                 sleep(Main.animation ? 1 : 1);
@@ -72,14 +62,15 @@ public class Clock extends Agent {
 
             if ( ! stopped) {
                 // next tick
-                send(new Message(this, this, 0, null));
+                send(new Message(this, this, null));
             }
         }
     }
 
-    private void doClock () {
-//        Log.d(TAG, String.format("%8d", time));
-        if (time > 100)
+    private void doClock(Message msg) {
+        mFramework.forwardClock(msg);
+
+        if (time > 1000)
             stopped = true;
     }
 

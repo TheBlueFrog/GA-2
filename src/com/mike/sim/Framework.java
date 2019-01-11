@@ -20,12 +20,6 @@ public class Framework
 	public Framework() {
 	}
 
-	public Agent construct(Class<? extends Agent> agentClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-		Constructor<? extends Agent> c = agentClass.getConstructor(Framework.class, Long.class);
-		Agent a = c.newInstance(this);
-		a.start();
-		return a;
-	}
 
 //	private void constructAgents() throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
 //	{
@@ -154,5 +148,18 @@ public class Framework
 
 	public void registerAsPaintable(PaintableAgent paintableAgent) {
 		paintableAgents.add(paintableAgent);
+	}
+
+	private Set<Agent> wantsClock = new HashSet<>();
+
+	public void registerForClock(Agent agent) {
+		wantsClock.add(agent);
+	}
+
+	public void forwardClock(Message msg) {
+		for(Agent agent : wantsClock) {
+			Message m = new Message(msg.mSender, agent, msg.mMessage);
+			send(m);
+		}
 	}
 }

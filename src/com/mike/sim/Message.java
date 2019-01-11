@@ -9,33 +9,18 @@ public class Message
 {
 	public Agent mSender = null;
 	public Agent mRecipient = null;
-	public long serialNumber;
 	public Object mMessage;
 	
-//	public Message (Agent sender, Agent recipient, String msg)
-//	{
-//		mSender = sender;
-//		mRecipient = recipient;
-//		mMessage = msg;
-//	}
-//
-//	public Message(String msg)
-//	{
-//		mMessage = msg;
-//	}
-
-	public Message(Agent sender, Agent class1, long serialNumber, Object msg)
+	public Message(Agent sender, Agent class1, Object msg)
 	{
 		mSender = sender;
 		mRecipient = class1;
-		this.serialNumber = serialNumber;
 		mMessage = msg;
 	}
 
 	public Message(Message m) {
 		this.mSender = m.mSender;
 		this.mRecipient = m.mRecipient;
-		this.serialNumber = m.serialNumber;
 		this.mMessage = m.mMessage;
 	}
 }
