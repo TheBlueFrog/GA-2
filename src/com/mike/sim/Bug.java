@@ -1,30 +1,41 @@
 package com.mike.sim;
 
+import com.mike.routing.Item;
 import com.mike.util.Location;
 import com.mike.util.Log;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Bug extends LocatedAgent {
 
     private static final String TAG = Bug.class.getSimpleName();
+    private final Energy energy;
+    private final Movement movement;
 
-    private final double AtRestEnergyDrainPerTick = 0.010;
 
-    private double energy = 100;
+    private List<Item> items = new ArrayList<>();
 
     public Bug(Framework f) {
         super(f);
+
+        // we have sub-agents that manage our various behaviors
+        // get them started
+
+        energy = new Energy(mFramework);
+        energy.start();
+
+        movement = new Movement(this);
+        movement.start();
 
         f.registerForClock(this);
     }
 
     @Override
     void paint(Graphics2D g2) {
-        if (energy > 50.0)
-            g2.setColor(Color.GREEN);
-        else if (energy > 10.)
-            g2.setColor(Color.RED);
+        // have to arbitrate between our internal agents
+        g2.setColor(energy.getColor());
 
         g2.drawRect(
                 (int) Location.meter2PixelX(location.x),
@@ -32,7 +43,7 @@ public class Bug extends LocatedAgent {
                 10, 10);
 
         g2.drawString(
-                String.format("%.0f", energy),
+                String.format("%.0f", energy.getEnergyLevel()),
                 (int) Location.meter2PixelX(location.x),
                 (int) Location.meter2PixelY(location.y));
     }
@@ -48,10 +59,15 @@ public class Bug extends LocatedAgent {
 
     private void doTick() {
 
-        energy -= AtRestEnergyDrainPerTick;
+        energy.idleDrain();
 
-//        this.location.x += 1.0;
-//        this.location.y += 1.0;
+        movement.computeDesired();
+
+        if (energy.canMove()) {
+            energy.moveDrain();
+            location = movement.move(location);
+        }
+
         Main.repaint();
     }
 }
