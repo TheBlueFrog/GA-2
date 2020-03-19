@@ -5,8 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.List;
 
-import com.mike.routing.Metrics;
-import com.mike.routing.Route;
 import com.mike.util.Log;
 
 /**
@@ -23,14 +21,10 @@ public class Main {
 
     public static boolean animation = true;
 
-//        mAgents.add(new AgentInfo(Clock.class, 1));
-//
-//        mAgents.add(new AgentInfo(Bug.class, 1));
-
     public static void main(String[] args)
     {
         {
-            List<String> v = new ArrayList<String>(Arrays.asList(args));
+            List<String> v = new ArrayList<>(Arrays.asList(args));
 
             if (v.contains("-animation"))
                 animation = true;
@@ -46,9 +40,6 @@ public class Main {
                 drawing = new Drawing(1.0);
 
                 mFramework = new Framework();
-
-                (new Clock(mFramework)).start();
-                (new Bug(mFramework)).start();
             }
         });
     }

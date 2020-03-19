@@ -8,70 +8,33 @@ import com.mike.util.LogImp;
  *
  * A global clock for simulation time
  */
-public class Clock extends Agent {
+public class Clock extends Thread {
 
     static private final String TAG = Clock.class.getSimpleName();
 
-    static private long time = 0;
-    static public long getTime () { return time; }
-
-    @Override
-    protected String getClassName() {
-        return null;
-    }
-
+    private long time = 0;
+    private boolean stopped = false;
+	private final Framework framework;
+	
+	public long getTime () { return time; }
 
     public Clock(Framework f) {
-        super(f);
-
-        LogImp _d = new LogImp() {
-            @Override
-            public void d(String tag, String msg) {
-                System.out.println(String.format("%8d %30s: %s", time, tag, msg));
-            }
-        };
-        LogImp _e = new LogImp() {
-            @Override
-            public void d(String tag, String msg) {
-                System.out.println(String.format("%8d %30s: ERROR %s", time, tag, msg));
-            }
-        };
-
-        Log.set_d(_d);
-        Log.set_e(_e);
-
-        send(new Message(this, this, null));
-
+		framework = f;
     }
 
     @Override
-    protected void onMessage(Message msg) {
-
-        Log.d(TAG, String.format("Msg from %s", msg.mSender.getClass().getSimpleName()));
-
-        if (msg.mSender instanceof Clock) {
+	public void run() {
+		do {
             time++;
 
-            doClock(msg);//
-
             try {
-                sleep(Main.animation ? 1 : 1);
+                sleep(1000);
+				Main.repaint();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-            if ( ! stopped) {
-                // next tick
-                send(new Message(this, this, null));
-            }
         }
-    }
-
-    private void doClock(Message msg) {
-        mFramework.forwardClock(msg);
-
-//        if (time > 1000)
-//            stopped = true;
+		while ( ! stopped);
     }
 
 }
