@@ -1,59 +1,38 @@
 
 
-# GA-2
+# Covid Clicker
 
-goal is to get an Agent to plan his actions by conceptualizing what it
-will do before it does it.  then execute the plan, with feedback and
-when reality diverges from the plan re-plan.
+Goal is to simulate behavior of large clusters of Covid Clickers
 
-the genome of the agent contains the capability to conceptualize
-but not the plan itself.  the actual planning process done by
-the agent is a learned behavior. 
+A clicker is a self-contained RF(?) device that detects the broadcasts
+of other clickers within a short radius.  This models the social distancing rules
+of COVID-19.
 
-what's in the genome
+A clicker will click/vibrate otherwise notify the user when another clicker
+is within 2 meters.  Possibly with some indication of actual distance, e.g. click
+rate or amplitude.
 
-  sensory inputs 
-  sensory inputs effect the agent 
-  the agent affects
-  
-  simplest possible is an agent that 
-    eats stuff in the environment to stay alive
-    has to move as the stuff is eaten
-    learns to optimize 
-    
-  plant
-    initially randomly placed
-    regenerates at a fixed rate which involves spreading
-    (add erratic water input later)
+Each clicker has a unique identifier that it broadcasts periodically.  Initial
+expection is that is on the order on once per second.  It may
+be that the rate of broadcast is variable e.g. being dependent on how many others are
+around.  
+
+When a clicker A receives clicker's B broadcast the identifier of B is
+compared to a 'silent' database and if <b>not</b> found issues a notification.
+If B's identifier is in the database no notification is issued.  This
+allows users to establish a set of clickers whose proximity is ignored.
+
+Controls:
+- **silence** - when clicker B is within range and notifications are being posted
+        this will enter B's identification in the database and result in
+        B not producing notification when in proximity.
+- **on/off** - optional, depends on power/battery tradeoffs. if we can get the
+        lifetime long enough it is not needed.
+- **unsilence** - nice-to-have but not essential if clickers are        
+        cheap enough to simply replace one or both if notifications are again desired.
         
-  agent 
-    requires food to get energy
-    moving takes energy
-    eating consumes plant
-    can sense food at some distance
+Possibly a user may have multiple clickers, one for at-home, one for at-work
+and another for in-public use.  Depends on pricing.
     
-    what is needed to have the agent plan food consumption?
-        concept of time
-        concept that eating consumes plants
-        concept that plants regrow
-     
 
-## Back to routing
-   
-    Brooks - various behaviors running all the time
-        hungry
-        pickup
-        agent learns how to prioritize the behaviors
-        
-    Instinct for pickup, once picked instinct to be dropped
-    
-### Cheap Routing
-Sum the attraction of 
 
-        pickups
-        drops
-        food
-          move that way
-          
-probably not very interesting
-          
