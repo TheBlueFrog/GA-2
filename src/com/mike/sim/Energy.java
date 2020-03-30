@@ -10,6 +10,10 @@ import javax.swing.text.html.HTMLDocument;
 import java.awt.*;
 import java.util.regex.MatchResult;
 
+/** this class manages the energy level of o moving agent
+ * at this time the cost of moving is set to zero so an
+ * agent never gets tired, e.g. can always move
+ */
 public class Energy extends Agent {
 
     @Override
@@ -17,8 +21,8 @@ public class Energy extends Agent {
         return Energy.class.getSimpleName();
     }
 
-    private final double AtIdleDrainPerTick = 0.010;
-    private final double MovingDrainPerTick = 0.10;
+    private final double AtIdleDrainPerTick = 0.0;
+    private final double MovingDrainPerTick = 0.0;
 
     private double energy = 100;
 

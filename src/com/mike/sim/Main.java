@@ -48,7 +48,10 @@ public class Main {
                 mFramework = new Framework();
 
                 (new Clock(mFramework)).start();
+                
                 (new Bug(mFramework)).start();
+				(new Bug(mFramework)).start();
+//				(new Bug(mFramework)).start();
             }
         });
     }

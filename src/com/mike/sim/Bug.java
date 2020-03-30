@@ -26,6 +26,7 @@ public class Bug extends LocatedAgent {
         energy = new Energy(mFramework);
         energy.start();
 
+        location = new Location(Location.getRandomLoc(5.0, Constants.random));
         movement = new Movement(this);
         movement.start();
 
@@ -68,6 +69,6 @@ public class Bug extends LocatedAgent {
             location = movement.move(location);
         }
 
-        Main.repaint();
+//        Main.repaint();
     }
 }

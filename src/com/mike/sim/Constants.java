@@ -7,8 +7,6 @@ import java.util.*;
  */
 public class Constants {
 
-
-
     public static Random random = new Random(1327L);
 
 }

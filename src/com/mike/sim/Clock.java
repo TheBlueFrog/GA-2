@@ -47,8 +47,11 @@ public class Clock extends Agent {
     @Override
     protected void onMessage(Message msg) {
 
-        Log.d(TAG, String.format("Msg from %s", msg.mSender.getClass().getSimpleName()));
-
+    	if (msg.mSender.getClass() != Clock.class) {
+    		// we shouldn't get messages from anyone except ourself...
+			Log.d(TAG, String.format("Msg from %s", msg.mSender.getClass().getSimpleName()));
+		}
+    	
         if (msg.mSender instanceof Clock) {
             time++;
 
