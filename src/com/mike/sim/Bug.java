@@ -72,7 +72,6 @@ public class Bug extends LocatedAgent {
             
         }
 
-//        Main.repaint();
     }
 	
 	public Location getNewGoal() {

@@ -29,16 +29,23 @@ public class Main {
 
     public static void main(String[] args)
     {
+    	int numBugs = 2;
         {
             List<String> v = new ArrayList<String>(Arrays.asList(args));
 
             if (v.contains("-animation"))
                 animation = true;
+
+			if (v.contains("-bugs")) {
+				int i = v.indexOf("-bugs");
+				numBugs = Integer.parseInt(v.get(i+1));
+			}
         }
 
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+		int finalNumBugs = numBugs;
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 // create the controls and drawing windows
                 mControls = new Controls();
@@ -47,11 +54,10 @@ public class Main {
 
                 mFramework = new Framework();
 
-                (new Clock(mFramework)).start();
+                new Clock(mFramework).start();
                 
-                (new Bug(mFramework)).start();
-				(new Bug(mFramework)).start();
-//				(new Bug(mFramework)).start();
+                for(int i = 0; i < finalNumBugs; ++i)
+	                new Bug(mFramework).start();
             }
         });
     }

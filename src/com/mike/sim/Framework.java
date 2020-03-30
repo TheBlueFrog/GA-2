@@ -6,6 +6,7 @@ package com.mike.sim;
  */
 
 import com.mike.util.Log;
+import com.sun.deploy.net.MessageHeader;
 
 import java.awt.*;
 import java.lang.reflect.Constructor;
@@ -150,21 +151,53 @@ public class Framework
 	}
 
 	private Set<PaintableAgent> paintableAgents = new HashSet<>();
-
 	public void registerAsPaintable(PaintableAgent paintableAgent) {
 		paintableAgents.add(paintableAgent);
 	}
 
 	private Set<Agent> wantsClock = new HashSet<>();
-
 	public void registerForClock(Agent agent) {
-		wantsClock.add(agent);
-	}
-
-	public void forwardClock(Message msg) {
-		for(Agent agent : wantsClock) {
-			Message m = new Message(msg.mSender, agent, msg.mMessage);
-			send(m);
+		synchronized (wantsClock) {
+			wantsClock.add(agent);
 		}
 	}
+
+	private Set<Movement> movingThings = new HashSet<>();
+	public void registerAsMoving(Movement movement) {
+		movingThings.add(movement);
+	}
+	
+	public void forwardClock(Message msg) {
+		synchronized (wantsClock) {
+			for (Agent agent : wantsClock) {
+				Message m = new Message(msg.mSender, agent, msg.mMessage);
+				send(m);
+			}
+		}
+	}
+	
+	/**
+	 * @param mover
+	 * @return list of other moving things sorted by distance
+	 * from the given mover
+	 */
+	public List<Movement> getMovingThingsLocations(Movement mover) {
+		List<Movement> movers = new ArrayList<>();
+		for(Movement m : movingThings) {
+			if ( ! m.equals(mover)) {
+				movers.add(m);
+			}
+		}
+		
+		movers.sort(new Comparator<Movement>() {
+			@Override
+			public int compare(Movement o1, Movement o2) {
+				Double d1 = o1.getLocation().distance(mover.getLocation());
+				Double d2 = o2.getLocation().distance(mover.getLocation());
+				return d1.compareTo(d2);
+			}
+		});
+		return movers;
+	}
+	
 }

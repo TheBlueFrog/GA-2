@@ -1,6 +1,9 @@
 package com.mike.sim;
 
 import com.mike.util.Location;
+import com.mike.util.Log;
+
+import java.util.List;
 
 /**
  * this class decides where a bug wants to move next
@@ -8,6 +11,8 @@ import com.mike.util.Location;
  * by physics and other issues.
  */
 public class Movement extends Agent {
+	
+	private static final String TAG = Movement.class.getSimpleName();
 	
 	@Override
     protected String getClassName() {
@@ -25,6 +30,8 @@ public class Movement extends Agent {
         super(bug.mFramework);
         this.bug = bug;
         this.goal = goal;
+        
+        bug.mFramework.registerAsMoving(this);
     }
 
     @Override
@@ -53,6 +60,8 @@ public class Movement extends Agent {
 		return loc;
     }
 
+    private static double minDistance = 20.0;
+    
     public void computeDesired() {
         // compute the desired dx, dy of the next step's movement
 		// head towards our goal
@@ -60,5 +69,18 @@ public class Movement extends Agent {
 		double dy = this.goal.y - this.bug.location.y;
 		
 		this.heading = Math.atan2(dy, dx);
+	
+		List<Movement> others = this.bug.mFramework.getMovingThingsLocations(this);
+		if (others.size() > 0) {
+			double d = others.get(0).bug.location.distance(this.bug.location);
+//			Log.d(TAG, String.format("%.0f", d));
+			if (d < minDistance) {
+				Log.d(TAG, "contact");
+			}
+		}
+	}
+	
+	public Location getLocation() {
+		return this.bug.location;
 	}
 }
