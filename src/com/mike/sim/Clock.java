@@ -72,7 +72,7 @@ public class Clock extends Agent {
 
     private void doClock(Message msg) {
         mFramework.forwardClock(msg);
-
+		mFramework.paint();
 //        if (time > 1000)
 //            stopped = true;
     }

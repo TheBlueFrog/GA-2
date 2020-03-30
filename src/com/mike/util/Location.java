@@ -27,6 +27,8 @@ public class Location {
     static public double WindowWidth = 750;            // window size in pixels
     static public double WindowHeight = 500;
 
+    static public double EqualDistance = 1.0;
+    
     static public double meter2PixelX(double meterX) {
         return ((meterX - worldLeft) / WorldWidthMeters) * WindowWidth; }
     static public double meter2PixelY(double meterY) {
@@ -99,10 +101,10 @@ public class Location {
         }
         final Location other = (Location) obj;
 
-        if ((this.x != other.x)) {
+        if (Math.abs(this.x - other.x) > EqualDistance) {
             return false;
         }
-        if ((this.y != other.y)) {
+        if (Math.abs(this.y - other.y) > EqualDistance) {
             return false;
         }
         return true;
@@ -147,8 +149,8 @@ public class Location {
     }
 
     /**
-     * @param radiusM   radius of a circle with 1 std dev of locations
-     * @return          random location
+     * @param radiusM   radius of a circle centered on 0, 0
+     * @param random    random stream
      */
     public static Location getRandomLoc(double radiusM, Random random) {
         double theta = random.nextDouble() * 2 * Math.PI;
@@ -161,4 +163,15 @@ public class Location {
                 WorldCenterY + y);
         return loc;
     }
+
+	/**
+	 * @param random    random stream
+	 */
+	public static Location getRandomLoc(Random random) {
+		double x = (random.nextDouble() * WorldWidthMeters) + worldLeft;
+		double y = (random.nextDouble() * WorldHeightMeters) + worldBottom;
+		
+		Location loc = new Location(x, y);
+		return loc;
+	}
 }

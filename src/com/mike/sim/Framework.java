@@ -140,6 +140,11 @@ public class Framework
 //			}
 //		}
 //	}
+	
+	public void paint() {
+		Main.repaint();
+	}
+	
 	public void paint(Graphics2D g2) {
 		paintableAgents.forEach(paintableAgent -> paintableAgent.paint(g2));
 	}
