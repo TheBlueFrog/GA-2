@@ -39,7 +39,6 @@ public class Location {
     static double WorldCenterY = ((worldTop - worldBottom) / 2) + worldBottom;
 
     /**
-     *
      * @param lat coordinates of a location
      * @param lon
      */
@@ -48,6 +47,7 @@ public class Location {
         this.y = lat;
     }
 
+    /** copy constructor */
     public Location(Location location) {
         this.x = location.x;
         this.y = location.y;
@@ -58,11 +58,8 @@ public class Location {
      * @return distance, in meters, between this location and another location
      */
     public double distance(Location location) {
-        // location is in lat/lon
-//        return (distance(y, x, location.y, location.x));
-//    }
-        double dx = meter2PixelX(this.x - location.x);
-        double dy = meter2PixelY(this.y - location.y);
+        double dx = this.x - location.x;
+        double dy = this.y - location.y;
         return Math.sqrt((dx * dx) + (dy * dy));
     }
 
@@ -173,5 +170,10 @@ public class Location {
 		
 		Location loc = new Location(x, y);
 		return loc;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("Location(%.1f, %.1f)", x, y);
 	}
 }

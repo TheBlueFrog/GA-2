@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.mike.routing.Metrics;
 import com.mike.routing.Route;
+import com.mike.util.Location;
 import com.mike.util.Log;
 
 /**
@@ -56,8 +57,14 @@ public class Main {
 
                 new Clock(mFramework).start();
                 
-                for(int i = 0; i < finalNumBugs; ++i)
-	                new Bug(mFramework).start();
+                if (finalNumBugs == 2) {
+					new Bug(mFramework, new Location(-900,100), new Location(900, 100)).start();
+					new Bug(mFramework, new Location(900,100), new Location(-900, 100)).start();
+				}
+                else {
+					for (int i = 0; i < finalNumBugs; ++i)
+						new Bug(mFramework).start();
+				}
             }
         });
     }
